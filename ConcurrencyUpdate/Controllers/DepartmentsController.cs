@@ -1,4 +1,5 @@
 ﻿using ConcurrencyUpdate.Models;
+using PagedList;
 using System;
 using System.Data;
 using System.Data.Entity;
@@ -12,11 +13,14 @@ namespace ConcurrencyUpdate.Controllers
     public class DepartmentsController : Controller
     {
         private MyContext db = new MyContext();
+        private const int PageSize = 3;
 
         // GET: Departments
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View(db.Departments.ToList());
+            var query = db.Departments.ToList();
+            var pageNumber = page ?? 1;
+            return View(query.ToPagedList(pageNumber, PageSize));
         }
 
         // GET: Departments/Details/5
@@ -187,9 +191,9 @@ namespace ConcurrencyUpdate.Controllers
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                return RedirectToAction("Delete", new {id = department.Id, concurrencyError = true});
+                return RedirectToAction("Delete", new { id = department.Id, concurrencyError = true });
             }
-            catch(DataException e)
+            catch (DataException e)
             {
                 ModelState.AddModelError(string.Empty, "Unable to delete. Try again, and if the problem persists contact your system administrator.");
                 return View(department);

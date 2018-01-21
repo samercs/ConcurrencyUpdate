@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ConcurrencyUpdate.Models.Department>
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<ConcurrencyUpdate.Models.Department>
 
 @{
     ViewBag.Title = "Index";
@@ -12,16 +13,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.Label("Name")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Budget)
+            @Html.Label("Budget")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StartDate)
+            @Html.Label("Start Date")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Administrator)
+            @Html.Label("Administrator")
         </th>
         <th></th>
     </tr>
@@ -49,3 +50,9 @@
 }
 
 </table>
+
+
+<section>
+    Page @(Model.PageNumber) Of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new {page}))
+</section>
